@@ -1,0 +1,107 @@
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.out
+*.a
+*.mex*
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.tar.gz*
+*.zip
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Latex #
+#########
+*.aux
+*.idx
+*.nav
+*.out
+*.snm
+*.toc
+*.bbl
+*.blg
+*.synctex
+
+# dSpace #
+##########
+*.map
+*.sdf
+*.ppc
+*.trc
+*.trz
+*.tmw
+*.hex
+*.srec
+*.mk
+*.dsbuildinfo
+
+# External #
+############
+*external/OOQP
+*external/coinhsl
+*external/matlab
+*external/download
+*external/casadi-matlab*
+*external/download_script
+*external/encrypted_script
+*external/encrypted_script_matlab
+*external/qore
+
+*download_software
+*download_matlab
+
+# Misc #
+########
+*.doc
+*.swp
+build/
+include/
+lib/
+local/
+*.dat
+octave-workspace
+.vscode
+notes.txt
+*.dSYM/
+cmakelint
+*.srctrlbm
+*.srctrldb
+*.srctrlprj
+.vs
+examples/python/__pycache__/
+build*
+*rti1401
+*.asv
+*.swo
+*.autosave
+_*
