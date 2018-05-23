@@ -65,42 +65,18 @@ Thumbs.db
 *.mk
 *.dsbuildinfo
 
-# External #
-############
-*external/OOQP
-*external/coinhsl
-*external/matlab
-*external/download
-*external/casadi-matlab*
-*external/download_script
-*external/encrypted_script
-*external/encrypted_script_matlab
-*external/qore
-
-*download_software
-*download_matlab
-
 # Misc #
 ########
 *.doc
 *.swp
-build/
-include/
-lib/
-local/
 *.dat
 octave-workspace
 .vscode
-notes.txt
 *.dSYM/
-cmakelint
 *.srctrlbm
 *.srctrldb
 *.srctrlprj
 .vs
-examples/python/__pycache__/
-build*
-*rti1401
 *.asv
 *.swo
 *.autosave
