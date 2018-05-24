@@ -37,11 +37,36 @@ for i=1:num_sim_iters
     states = [states; info.x(:, 1).'];
     controls = [controls; info.u(:, 1).'];
     timing = [timing; info.time];
-    if flag > 0
-        status = [status; 0];
-    else
-        status = [status; -1];
+    
+    if flag <= 0
+        switch flag
+            case 0
+                if ~isfield(info, 'iterations')
+                    warnStr = 'Maximum number of iterations reached. May not be a problem (set ''debug'' to 3 in generateMotor() for more detailed diagnostics). Continuing... ';
+                elseif ~isfield(info, 'optimval')
+                    warnStr = ['Maximum number of iterations reached with ' num2str(info.iterations) '. May not be a problem (set ''debug'' to 3 in generateMotor() for more detailed diagnostics). Continuing... '];
+                else
+                    warnStr = ['Maximum number of iterations reached with ' num2str(info.iterations) '. Optimality tolerance ' num2str(info.optimval) ', feasibility tolerance ' num2str(info.feasval) '. Continuing... '];
+                end
+                warning('falcopt:example:maximumIterations', warnStr);
+            case -1
+                if ~isfield(info, 'optimval')
+                    warnStr = 'Line-search failed to progress. Close to solution, may not be a problem (set ''debug'' to 3 in generateMotor() for more detailed diagnostics). Continuing... ';
+                else
+                    warnStr = ['Line-search failed to progress. Close to solution, may not be a problem: optimality tolerance ' num2str(info.optimval) ', feasibility tolerance ' num2str(info.feasval) '. Continuing... '];
+                end
+                warning('falcopt:example:closeToSolution', warnStr);
+            case -10
+                if ~isfield(info, 'optimval')
+                    warnStr = 'Line-search failed to progress (set ''debug'' to 3 in generateMotor() for more detailed diagnostics). Continuing... ';
+                else
+                    warnStr = ['Line-search failed to progress: optimality tolerance ' num2str(info.optimval) ', feasibility tolerance ' num2str(info.feasval) '. Continuing... '];
+                end
+                warning('falcopt:example:lineSearchFailed', warnStr);
+        end
     end
+   
+    status = [status; flag - 1];
     
     u_guess = info.u.';
 
