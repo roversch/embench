@@ -1,6 +1,15 @@
 function [states, controls, timing, status] = grampc_run(N, Ts, W, WN, Fmax, x0, num_sim_iters)
 
-run grampc_generate_functions
+probfct = 'grampc_pendulum_model.c';
+
+copyfile(['../model/', probfct], probfct);
+
+grampc_root_path = '/Users/robin/GRAMPC/';
+
+addpath([grampc_root_path 'matlab/mfiles']);
+
+grampc_make_toolbox(grampc_root_path);
+grampc_make_probfct(grampc_root_path, probfct);
 
 % Parameter definition
 % Initial values and setpoints of the states
@@ -23,9 +32,12 @@ user.param.t0    = 0.0;         % time at the current sampling step
 % Basic algorithmic options
 user.opt.Nhor        = N;      % Number of steps for the system integration
 user.opt.TerminalCost = 'on';
+user.opt.ShiftControl = 'off';
+user.opt.MaxMultIter = 20;
+user.opt.MaxGradIter = 20;
 
 % Constraints tolerances
-user.opt.ConstraintsAbsTol = 1e-3*[1e-1 1 1];
+% user.opt.ConstraintsAbsTol = 1e-3*[1e-1 1 1];
 
 % optional settings for a better performance
 % user.opt.LineSearchMax = 1e1;
@@ -46,17 +58,6 @@ grampc = grampc_update_struct_grampc(grampc,user);
 % Estimate and set PenaltyMin
 grampc = CmexFiles.grampc_estim_penmin_Cmex(grampc,1);
 
-probfct = 'grampc_pendulum_model.c';
-
-grampc_root_path = '/Users/robin/GRAMPC';
-
-addpath([grampc_root_path 'matlab/mfiles']);
-
-grampc_make_toolbox(grampc_root_path);
-grampc_make_probfct(grampc_root_path, probfct);
-
-rmpath([grampc_root_path 'matlab/mfiles']);
-
 Tsim = num_sim_iters * Ts;
 
 CmexFiles.grampc_printopt_Cmex(grampc);
@@ -64,6 +65,11 @@ CmexFiles.grampc_printparam_Cmex(grampc);
 
 % init solution structure
 vec = grampc_init_struct_sol(grampc, Tsim);
+
+states = x0.';
+controls = [];
+timing = [];
+status = [];
 
 i = 1;
 while 1
@@ -87,12 +93,19 @@ while 1
     end
     
     % simulate system
-    vec.x(:,i+1) = vec.x(:, i);
+    vec.x(:,i+1) = grampc.sol.xnext;
+        
+    states = [states; vec.x(:, i+1).'];
+    controls = [controls; vec.u(:, i).'];
+    timing = [timing; vec.CPUtime(i)/1000];
+    status = [status; grampc.sol.status];
     
     % update iteration counter
     i = i + 1;
-
+    
 end
+
+rmpath([grampc_root_path 'matlab/mfiles']);
 
 end
 

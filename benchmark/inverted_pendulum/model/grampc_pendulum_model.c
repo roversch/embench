@@ -35,6 +35,200 @@
 
 #include "probfct.h"
 
+#define POW2(a) ((a)*(a))
+
+/* Casadi generated functions */
+
+#ifndef casadi_real
+#define casadi_real double
+#endif
+
+#ifndef casadi_int
+#define casadi_int int
+#endif
+
+static casadi_real casadi_sq(casadi_real x) {
+    return x*x;
+}
+
+/* pendulum:(i0[4],i1)->(o0[4]) */
+static int pendulum(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, void* mem) {
+  casadi_real a0, a1, a2, a3, a4, a5, a6, a7;
+  a0=arg[0] ? arg[0][2] : 0;
+  if (res[0]!=0) res[0][0]=a0;
+  a0=arg[0] ? arg[0][3] : 0;
+  if (res[0]!=0) res[0][1]=a0;
+  a1=-8.0000000000000016e-02;
+  a2=arg[0] ? arg[0][1] : 0;
+  a3=sin(a2);
+  a3=(a1*a3);
+  a4=casadi_sq(a0);
+  a3=(a3*a4);
+  a4=9.8100000000000009e-01;
+  a5=cos(a2);
+  a4=(a4*a5);
+  a5=sin(a2);
+  a4=(a4*a5);
+  a3=(a3+a4);
+  a4=arg[1] ? arg[1][0] : 0;
+  a3=(a3+a4);
+  a5=1.1000000000000001e+00;
+  a6=1.0000000000000001e-01;
+  a7=cos(a2);
+  a7=casadi_sq(a7);
+  a6=(a6*a7);
+  a5=(a5-a6);
+  a3=(a3/a5);
+  if (res[0]!=0) res[0][2]=a3;
+  a3=cos(a2);
+  a1=(a1*a3);
+  a3=sin(a2);
+  a1=(a1*a3);
+  a0=casadi_sq(a0);
+  a1=(a1*a0);
+  a0=cos(a2);
+  a4=(a4*a0);
+  a1=(a1+a4);
+  a4=1.0791000000000002e+01;
+  a2=sin(a2);
+  a4=(a4*a2);
+  a1=(a1+a4);
+  a4=8.0000000000000004e-01;
+  a4=(a4*a5);
+  a1=(a1/a4);
+  if (res[0]!=0) res[0][3]=a1;
+  return 0;
+}
+
+/* adj_df_dx:(i0[4],i1,i2[4])->(o0[4]) */
+static int adj_df_dx(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, void* mem) {
+  casadi_real a0, a1, a10, a11, a12, a13, a14, a15, a16, a17, a18, a2, a3, a4, a5, a6, a7, a8, a9;
+  a0=0.;
+  if (res[0]!=0) res[0][0]=a0;
+  a0=arg[0] ? arg[0][1] : 0;
+  a1=cos(a0);
+  a2=1.0791000000000002e+01;
+  a3=arg[2] ? arg[2][3] : 0;
+  a4=8.0000000000000004e-01;
+  a5=1.1000000000000001e+00;
+  a6=1.0000000000000001e-01;
+  a7=cos(a0);
+  a8=casadi_sq(a7);
+  a8=(a6*a8);
+  a5=(a5-a8);
+  a8=(a4*a5);
+  a9=(a3/a8);
+  a10=(a2*a9);
+  a1=(a1*a10);
+  a10=sin(a0);
+  a11=arg[1] ? arg[1][0] : 0;
+  a12=(a11*a9);
+  a10=(a10*a12);
+  a1=(a1-a10);
+  a10=cos(a0);
+  a12=-8.0000000000000016e-02;
+  a13=cos(a0);
+  a13=(a12*a13);
+  a14=arg[0] ? arg[0][3] : 0;
+  a15=casadi_sq(a14);
+  a16=(a15*a9);
+  a17=(a13*a16);
+  a10=(a10*a17);
+  a1=(a1+a10);
+  a10=sin(a0);
+  a17=sin(a0);
+  a16=(a17*a16);
+  a16=(a12*a16);
+  a10=(a10*a16);
+  a1=(a1-a10);
+  a10=sin(a0);
+  a7=(a7+a7);
+  a13=(a13*a17);
+  a15=(a13*a15);
+  a17=cos(a0);
+  a17=(a11*a17);
+  a15=(a15+a17);
+  a17=sin(a0);
+  a2=(a2*a17);
+  a15=(a15+a2);
+  a15=(a15/a8);
+  a15=(a15/a8);
+  a15=(a15*a3);
+  a4=(a4*a15);
+  a15=sin(a0);
+  a15=(a12*a15);
+  a3=casadi_sq(a14);
+  a8=(a15*a3);
+  a2=9.8100000000000009e-01;
+  a17=cos(a0);
+  a17=(a2*a17);
+  a16=sin(a0);
+  a18=(a17*a16);
+  a8=(a8+a18);
+  a8=(a8+a11);
+  a8=(a8/a5);
+  a8=(a8/a5);
+  a11=arg[2] ? arg[2][2] : 0;
+  a8=(a8*a11);
+  a4=(a4+a8);
+  a6=(a6*a4);
+  a7=(a7*a6);
+  a10=(a10*a7);
+  a1=(a1-a10);
+  a10=cos(a0);
+  a11=(a11/a5);
+  a17=(a17*a11);
+  a10=(a10*a17);
+  a1=(a1+a10);
+  a10=sin(a0);
+  a16=(a16*a11);
+  a2=(a2*a16);
+  a10=(a10*a2);
+  a1=(a1-a10);
+  a0=cos(a0);
+  a3=(a3*a11);
+  a12=(a12*a3);
+  a0=(a0*a12);
+  a1=(a1+a0);
+  if (res[0]!=0) res[0][1]=a1;
+  a1=arg[2] ? arg[2][0] : 0;
+  if (res[0]!=0) res[0][2]=a1;
+  a1=(a14+a14);
+  a13=(a13*a9);
+  a1=(a1*a13);
+  a14=(a14+a14);
+  a15=(a15*a11);
+  a14=(a14*a15);
+  a1=(a1+a14);
+  a14=arg[2] ? arg[2][1] : 0;
+  a1=(a1+a14);
+  if (res[0]!=0) res[0][3]=a1;
+  return 0;
+}
+
+/* adj_df_du:(i0[4],i1,i2[4])->(o0) */
+static int adj_df_du(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, void* mem) {
+  casadi_real a0, a1, a2, a3, a4, a5;
+  a0=arg[0] ? arg[0][1] : 0;
+  a1=cos(a0);
+  a2=arg[2] ? arg[2][3] : 0;
+  a3=8.0000000000000004e-01;
+  a4=1.1000000000000001e+00;
+  a5=1.0000000000000001e-01;
+  a0=cos(a0);
+  a0=casadi_sq(a0);
+  a5=(a5*a0);
+  a4=(a4-a5);
+  a3=(a3*a4);
+  a2=(a2/a3);
+  a1=(a1*a2);
+  a2=arg[2] ? arg[2][2] : 0;
+  a2=(a2/a4);
+  a1=(a1+a2);
+  if (res[0]!=0) res[0][0]=a1;
+  return 0;
+}
+
 /** OCP dimensions: states (Nx), controls (Nu), parameters (Np), equalities (Ng), 
     inequalities (Nh), terminal equalities (NgT), terminal inequalities (NhT) **/
 void ocp_dim(typeInt *Nx, typeInt *Nu, typeInt *Np, typeInt *Ng, typeInt *Nh, typeInt *NgT, typeInt *NhT, typeUSERPARAM *userparam)
@@ -53,29 +247,44 @@ void ocp_dim(typeInt *Nx, typeInt *Nu, typeInt *Np, typeInt *Ng, typeInt *Nh, ty
     ------------------------------------ **/
 void ffct(typeRNum *out, ctypeRNum t, ctypeRNum *x, ctypeRNum *u, ctypeRNum *p, typeUSERPARAM *userparam)
 {
-    typeRNum denom = MASS_CART+MASS_PENDULUM-MASS_PENDULUM*COS(x[1])*COS(x[1]);
     
-	out[0] = x[2];
-	out[1] = x[3];
-	out[2] = (-MASS_PENDULUM*LENGTH_ROD*SIN(x[1])*x[3]*x[3] + MASS_PENDULUM*GRAV*COS(x[1])*SIN(x[1]) + u[0]) / denom;
-	out[3] = (-MASS_PENDULUM*MASS_CART*COS(x[1])*sin(x[1])*x[3]*x[3] + u[0]*COS(x[1]) + (MASS_CART+MASS_PENDULUM)*GRAV*SIN(x[1]))/(MASS_CART*denom);
+    const casadi_real *arg[2];
+    arg[0] = x;
+    arg[1] = u;
+    
+    casadi_real *res[1];
+    res[0] = out;
+    
+	pendulum(arg, res, 0, 0, 0);
 }
 /** Jacobian df/dx multiplied by vector vec, i.e. (df/dx)^T*vec or vec^T*(df/dx) **/
 void dfdx_vec(typeRNum *out, ctypeRNum t, ctypeRNum *x, ctypeRNum *vec, ctypeRNum *u, ctypeRNum *p, typeUSERPARAM *userparam)
 {
-	ctypeRNum aux1 = SIN(x[4]);
-	ctypeRNum aux2 = COS(x[4]);
-
-	out[0] = 0;
-	out[1] = vec[0];
-	out[2] = (GRAV * aux1 + aux2 * u[0] + 2 * x[3] * x[5])*vec[5] / (x[2] * x[2]);
-	out[3] = vec[2] - (2 * x[5] * vec[5]) / x[2];
+	    
+    const casadi_real *arg[3];
+    arg[0] = x;
+    arg[1] = u;
+    arg[2] = vec;
+    
+    casadi_real *res[1];
+    res[0] = out;
+    
+    adj_df_dx(arg, res, 0, 0, 0);
 }
 /** Jacobian df/du multiplied by vector vec, i.e. (df/du)^T*vec or vec^T*(df/du) **/
 void dfdu_vec(typeRNum *out, ctypeRNum t, ctypeRNum *x, ctypeRNum *vec, ctypeRNum *u, ctypeRNum *p, typeUSERPARAM *userparam)
 {
-	out[0] = vec[1] - ((COS(x[4]))*vec[5]) / x[2];
-	out[1] = vec[3];
+
+    const casadi_real *arg[3];
+    arg[0] = x;
+    arg[1] = u;
+    arg[2] = vec;
+    
+    casadi_real *res[1];
+    res[0] = out;
+    
+    adj_df_du(arg, res, 0, 0, 0);
+    
 }
 /** Jacobian df/dp multiplied by vector vec, i.e. (df/dp)^T*vec or vec^T*(df/dp) **/
 void dfdp_vec(typeRNum *out, ctypeRNum t, ctypeRNum *x, ctypeRNum *vec, ctypeRNum *u, ctypeRNum *p, typeUSERPARAM *userparam)
@@ -89,14 +298,12 @@ void lfct(typeRNum *out, ctypeRNum t, ctypeRNum *x, ctypeRNum *u, ctypeRNum *p, 
 {
 	ctypeRNum *pCost = (ctypeRNum*)userparam;
 
-	out[0] = pCost[0] * POW2(x[0] - xdes[0]) +
+	out[0] =
+        pCost[0] * POW2(x[0] - xdes[0]) +
 		pCost[1] * POW2(x[1] - xdes[1]) +
 		pCost[2] * POW2(x[2] - xdes[2]) +
 		pCost[3] * POW2(x[3] - xdes[3]) +
-		pCost[4] * POW2(x[4] - xdes[4]) +
-		pCost[5] * POW2(x[5] - xdes[5]) +
-		pCost[6] * POW2(u[0] - udes[0]) +
-		pCost[7] * POW2(u[1] - udes[1]);
+		pCost[4] * POW2(u[0] - udes[0]);
 }
 /** Gradient dl/dx **/
 void dldx(typeRNum *out, ctypeRNum t, ctypeRNum *x, ctypeRNum *u, ctypeRNum *p, ctypeRNum *xdes, ctypeRNum *udes, typeUSERPARAM *userparam)
@@ -107,16 +314,13 @@ void dldx(typeRNum *out, ctypeRNum t, ctypeRNum *x, ctypeRNum *u, ctypeRNum *p, 
 	out[1] = 2 * pCost[1] * (x[1] - xdes[1]);
 	out[2] = 2 * pCost[2] * (x[2] - xdes[2]);
 	out[3] = 2 * pCost[3] * (x[3] - xdes[3]);
-	out[4] = 2 * pCost[4] * (x[4] - xdes[4]);
-	out[5] = 2 * pCost[5] * (x[5] - xdes[5]);
 }
 /** Gradient dl/du **/
 void dldu(typeRNum *out, ctypeRNum t, ctypeRNum *x, ctypeRNum *u, ctypeRNum *p, ctypeRNum *xdes, ctypeRNum *udes, typeUSERPARAM *userparam)
 {
 	ctypeRNum *pCost = (ctypeRNum*)userparam;
 
-	out[0] = 2 * pCost[6] * (u[0] - udes[0]);
-	out[1] = 2 * pCost[7] * (u[1] - udes[1]);
+	out[0] = 2 * pCost[4] * (u[0] - udes[0]);
 }
 /** Gradient dl/dp **/
 void dldp(typeRNum *out, ctypeRNum t, ctypeRNum *x, ctypeRNum *u, ctypeRNum *p, ctypeRNum *xdes, ctypeRNum *udes, typeUSERPARAM *userparam)
@@ -128,10 +332,24 @@ void dldp(typeRNum *out, ctypeRNum t, ctypeRNum *x, ctypeRNum *u, ctypeRNum *p, 
     ---------------------------------------- **/
 void Vfct(typeRNum *out, ctypeRNum T, ctypeRNum *x, ctypeRNum *p, ctypeRNum *xdes, typeUSERPARAM *userparam)
 {
+	ctypeRNum *pCost = (ctypeRNum*)userparam;
+
+    out[0] =
+        pCost[5] * POW2(x[0] - xdes[0]) +
+		pCost[6] * POW2(x[1] - xdes[1]) +
+		pCost[7] * POW2(x[2] - xdes[2]) +
+		pCost[8] * POW2(x[3] - xdes[3]);
 }
+
 /** Gradient dV/dx **/
 void dVdx(typeRNum *out, ctypeRNum T, ctypeRNum *x, ctypeRNum *p, ctypeRNum *xdes, typeUSERPARAM *userparam)
 {
+	ctypeRNum *pCost = (ctypeRNum*)userparam;
+
+	out[0] = 2 * pCost[5] * (x[0] - xdes[0]);
+	out[1] = 2 * pCost[6] * (x[1] - xdes[1]);
+	out[2] = 2 * pCost[7] * (x[2] - xdes[2]);
+	out[3] = 2 * pCost[8] * (x[3] - xdes[3]);
 }
 /** Gradient dV/dp **/
 void dVdp(typeRNum *out, ctypeRNum T, ctypeRNum *x, ctypeRNum *p, ctypeRNum *xdes, typeUSERPARAM *userparam)
@@ -166,30 +384,14 @@ void dgdp_vec(typeRNum *out, ctypeRNum t, ctypeRNum *x, ctypeRNum *u, ctypeRNum 
     ------------------------------------------------------ **/
 void hfct(typeRNum *out, ctypeRNum t, ctypeRNum *x, ctypeRNum *u, ctypeRNum *p, typeUSERPARAM *userparam)
 {
-	ctypeRNum *pSys = (ctypeRNum*)userparam + 8;
-	ctypeRNum xPos = x[0] + SIN(x[4])*x[2];
-
-	out[0] = COS(x[4]) * x[2] - pSys[0] * POW2(xPos) - pSys[1];
-	out[1] = x[5] - pSys[2];
-	out[2] = -x[5] - pSys[2];
 }
 /** Jacobian dh/dx multiplied by vector vec, i.e. (dh/dx)^T*vec or vec^T*(dg/dx) **/
 void dhdx_vec(typeRNum *out, ctypeRNum t, ctypeRNum *x, ctypeRNum *u, ctypeRNum *p, ctypeRNum *vec, typeUSERPARAM *userparam)
 {
-	ctypeRNum *pSys = (ctypeRNum*)userparam + 8;
-	ctypeRNum temp = pSys[0] * (x[0] + SIN(x[4])*x[2]);
-
-	out[0] = temp * vec[0];
-	out[1] = 0;
-	out[2] = (SIN(x[4])*temp + COS(x[4]))*vec[0];
-	out[3] = 0;
-	out[4] = (COS(x[4])*x[2] * temp - SIN(x[4])*x[2])*vec[0];
-	out[5] = 0 + vec[1] - vec[2];
 }
 /** Jacobian dh/du multiplied by vector vec, i.e. (dh/du)^T*vec or vec^T*(dg/du) **/
 void dhdu_vec(typeRNum *out, ctypeRNum t, ctypeRNum *x, ctypeRNum *u, ctypeRNum *p, ctypeRNum *vec, typeUSERPARAM *userparam)
 {
-	out[0] = 0;
 }
 /** Jacobian dh/dp multiplied by vector vec, i.e. (dh/dp)^T*vec or vec^T*(dg/dp) **/
 void dhdp_vec(typeRNum *out, ctypeRNum t, ctypeRNum *x, ctypeRNum *u, ctypeRNum *p, ctypeRNum *vec, typeUSERPARAM *userparam)

@@ -17,7 +17,7 @@ Fmax = 8;
 x0 = [0; pi; 0; 0];
 num_sim_iters = 100;
 
-solvers = {'ipopt', 'acado', 'falcopt', 'grampc'};
+solvers = {'falcopt', 'grampc', 'ipopt', 'acado'};
 
 for num_solver=1:numel(solvers)
     sol = solvers{num_solver};
