@@ -20,3 +20,13 @@ subplot(3, 2, 6); hold on;
 for j=1:numel(solvers)
     stairs(time_vector(1:end-1), status.(solvers{j}))
 end
+
+
+fprintf([repmat('-', 1, 80), '\n']);
+fprintf(['(ms)\t\tmean\t\t\tmin\t\t\tmax\t\t', '\n']);
+fprintf([repmat('-', 1, 80), '\n']);
+for j=1:numel(solvers)
+   fprintf(['%s\t\t', '%.2f', '\t\t\t', '%.2f', '\t\t\t', '%.2f', '\t\t\n'], ...
+       solvers{j}, 1000*mean(timing.(solvers{j})), ...
+       1000*min(timing.(solvers{j})), 1000*max(timing.(solvers{j})));
+end
