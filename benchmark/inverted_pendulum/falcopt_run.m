@@ -1,6 +1,8 @@
-function [states, controls, timing, status] = falcopt_run(N, Ts, W, WN, Fmax, x0, num_sim_iters)
+function [states, controls, timing, status, num_iters] = falcopt_run(N, Ts, W, WN, Fmax, x0, num_sim_iters)
 
 clear GLOBAL
+
+addpath('~/FalcOpt');
 
 import casadi.*
 
@@ -27,6 +29,7 @@ states = x0.';
 controls = [];
 timing = [];
 status = [];
+num_iters = [];
 
 u_guess = zeros(N, nu);
 
@@ -68,6 +71,8 @@ for i=1:num_sim_iters
    
     status = [status; flag - 1];
     
+    num_iters = [num_iters; info.iterations];
+
     u_guess = info.u.';
 
 end

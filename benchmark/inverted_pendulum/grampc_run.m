@@ -1,4 +1,4 @@
-function [states, controls, timing, status] = grampc_run(N, Ts, W, WN, Fmax, x0, num_sim_iters)
+function [states, controls, timing, status, num_iters] = grampc_run(N, Ts, W, WN, Fmax, x0, num_sim_iters)
 
 probfct = 'grampc_pendulum_model.c';
 
@@ -70,6 +70,7 @@ states = x0.';
 controls = [];
 timing = [];
 status = [];
+num_iters = [];
 
 i = 1;
 while 1
@@ -99,7 +100,8 @@ while 1
     controls = [controls; vec.u(:, i).'];
     timing = [timing; vec.CPUtime(i)/1000];
     status = [status; grampc.sol.status];
-    
+    num_iters = [num_iters; vec.iter(1, i)];
+
     % update iteration counter
     i = i + 1;
     

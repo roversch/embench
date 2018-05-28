@@ -1,4 +1,4 @@
-function [states, controls, timing, status] = ipopt_run(N, Ts, W, WN, Fmax, x0, num_sim_iters)
+function [states, controls, timing, status, num_iters] = ipopt_run(N, Ts, W, WN, Fmax, x0, num_sim_iters)
 
 clear GLOBAL
 
@@ -49,6 +49,7 @@ states = x0.';
 controls = [];
 timing = [];
 status = [];
+num_iters = [];
 
 for i=1:num_sim_iters
 
@@ -72,6 +73,8 @@ for i=1:num_sim_iters
     else
         status = [status; -1];
     end
+
+    num_iters = [num_iters; ipopt_solver.stats.iter_count];
     
 end
 

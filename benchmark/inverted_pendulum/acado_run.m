@@ -1,6 +1,8 @@
-function [states, controls, timings, status] = acado_run(N, Ts, W, WN, Fmax, x0, num_sim_iters)
+function [states, controls, timings, status, num_iters] = acado_run(N, Ts, W, WN, Fmax, x0, num_sim_iters)
 
 clear GLOBAL
+
+run '~/ACADOtoolkit/interfaces/matlab/make'
 
 DifferentialState p theta v dtheta;
 Control Force;
@@ -36,54 +38,69 @@ mpc.exportCode('pendulum_export');
 
 global ACADO_;
 copyfile([ACADO_.pwd '/../../external_packages/qpoases'], 'pendulum_export/qpoases')
+copyfile([ACADO_.pwd '/../../external_packages/qpoases3'], 'pendulum_export/qpoases3')
 
 cd pendulum_export
 make_acado_solver('../acado_MPCstep')
 cd ..
 
-% Parameters
-input.x = repmat(x0.', N+1, 1);
-input.u = zeros(N, 1);
+for j=1:1
 
-input.y = zeros(N, 5);
-input.yN = zeros(1, 4);
+    % Parameters
+    input.x = repmat(x0.', N+1, 1);
+    input.u = zeros(N, 1);
 
-input.lbValues = -Fmax*ones(N, 1);
-input.ubValues = +Fmax*ones(N, 1);
+    input.y = zeros(N, 5);
+    input.yN = zeros(1, 4);
 
-input.shifting.strategy = 0;
+    input.lbValues = -Fmax*ones(N, 1);
+    input.ubValues = +Fmax*ones(N, 1);
 
-states = x0.';
-controls = [];
-timings = [];
-status = [];
+    input.control = 0;
+    input.initialization = 2;
+    input.shifting.strategy = 0;
 
-for i=1:num_sim_iters
-    
-    % Solve NMPC OCP
-    input.x0 = states(end, :);
-    
-    
-    kkt = inf;
-    running_time = 0;
-    while (kkt > 1e-10)
-        output = acado_MPCstep(input);
+
+    states = x0.';
+    controls = [];
+    timings = [];
+    status = [];
+    num_iters = [];
+
+    for i=1:num_sim_iters
+        
+        % Solve NMPC OCP
+        input.x0 = states(end, :);
+        
+        num_sqp_iters = 0;
+        kkt = inf;
+        running_time = 0;
+        while (kkt > 1e-10)
+            output = acado_MPCstep(input);
+            input.x = output.x;
+            input.u = output.u;
+            kkt = output.info.kktValue;
+            running_time = running_time + output.info.cpuTime;
+            num_sqp_iters = num_sqp_iters + 1;
+            if num_sqp_iters == 1
+                break
+            end
+        end
+        
+        % Save the MPC step
+        states = [states; output.x(2, :)];
+        controls = [controls; output.u(1, :)];
+        timings = [timings; running_time];
+        status = [status; output.info.status];
+        num_iters = [num_iters; output.info.QP_iter];
+
         input.x = output.x;
         input.u = output.u;
-        kkt = output.info.kktValue;
-        running_time = running_time + output.info.cpuTime;
-    end
-       
-    % Save the MPC step
-    states = [states; output.x(2, :)];
-    controls = [controls; output.u(1, :)];
-    timings = [timings; running_time];
-    status = [status; output.info.status];
-    
-    input.x = output.x;
-    input.u = output.u;
-    
-end  % while
+        
+        
+    end  % while
+
+end
 
 end  % function
 
