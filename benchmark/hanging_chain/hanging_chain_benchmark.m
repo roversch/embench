@@ -8,8 +8,11 @@ num_sim_iters = 50;
 
 mass_vs_time = [];
 
-for num_masses=3:3
+u_0 = [-1; 1; 1];
 
+hp = zeros(20, 20);
+
+for num_masses=3:3
 
     num_free_masses = num_masses - 2;
     p_end_ref = [1; 0; 0];
@@ -22,18 +25,15 @@ for num_masses=3:3
                 
     x_ref = [p_ref; v_ref; p_end_ref];
 
-    x0 = x_ref;
-    x0(end-2:end) = [1; -1; 0];
-
     Q = blkdiag(25*eye(length(p_ref)), 1*eye(length(v_ref)), 25*eye(3));
     R = 0.01*eye(3);
 
     W = blkdiag(Q, R);
     WN = Q;
 
-    umax = 1;
+    umax = ones(3, 1);
 
-    solvers = {'acados', 'acado'};
+    solvers = {'ipopt', 'grampc', 'falcopt', 'acados', 'acado'};
 
     integrator = @(x, u) ode45(@(t, y) hanging_chain_ode(y, u, num_free_masses), [0 Ts], x);
 
@@ -45,13 +45,12 @@ for num_masses=3:3
         eval(['cd _', sol]);
         eval(['[X.', sol, ', U.', sol, ', timing.', sol, ', status.', sol, ...
             ', num_iters.', sol, ']', ...
-            '= ', sol, '_run(num_free_masses, N, Ts, W, WN, umax, x_ref, x0, num_sim_iters, integrator);']);
+            '= ', sol, '_run(num_free_masses, N, Ts, W, WN, umax, x_ref, u_0, num_sim_iters, integrator);']);
         cd ..
 
         mass_vs_time = [mass_vs_time; mean(timing.(sol))];
 
     end
-
 
 end
 

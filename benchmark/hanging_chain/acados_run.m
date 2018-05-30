@@ -1,4 +1,4 @@
-function [states, controls, timing, status, num_iters]  = acados_run(num_free_masses, N, Ts, W, WN, umax, x_ref, x0, num_sim_iters, integrator_fun)
+function [states, controls, timing, status, num_iters]  = acados_run(num_free_masses, N, Ts, W, WN, umax, x_ref, u_0, num_sim_iters, integrator_fun)
 
 addpath('~/local/matlab');
 addpath('~/local/lib');
@@ -20,18 +20,18 @@ nu = 3;
 nlp = ocp_nlp(N, nx, nu);
 nlp.set_dynamics(ode_fun, struct('integrator', 'rk4', 'step', Ts));
 
-nlp.set_field('lbu', -umax*ones(3, 1));
-nlp.set_field('ubu', +umax*ones(3, 1));
+nlp.set_field('lbu', -umax);
+nlp.set_field('ubu', +umax);
 
-nlp.set_field('lbx', 0, x0);
-nlp.set_field('ubx', 0, x0);
+nlp.set_field('lbx', 0, x_ref);
+nlp.set_field('ubx', 0, x_ref);
 
 nlp.set_stage_cost(eye(nx+nu), [x_ref; zeros(nu, 1)], W);
 nlp.set_terminal_cost(eye(nx), x_ref, WN);
 
 nlp.initialize_solver('sqp', struct('qp_solver', 'qpoases', 'max_iter', 1));
 
-states = x0.';
+states = x_ref.';
 controls = [];
 timing = [];
 status = [];
@@ -51,7 +51,12 @@ for i=1:num_sim_iters
 
     all_x = output.states();
     all_u = output.controls();
-    controls = [controls; all_u{1}.'];
+
+    if i <= 5
+        controls = [controls; u_0.'];
+    else
+        controls = [controls; all_u{1}.'];
+    end
 
     [~, sim_out] = integrator_fun(current_x, controls(end, :).');
     states = [states; sim_out(end, :)];

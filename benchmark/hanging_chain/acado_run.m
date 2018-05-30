@@ -1,4 +1,4 @@
-function [states, controls, timing, status, num_iters] = acado_run(num_free_masses, N, Ts, W, WN, umax, x_ref, x0, num_sim_iters, integrator_fun)
+function [states, controls, timing, status, num_iters] = acado_run(num_free_masses, N, Ts, W, WN, umax, x_ref, u_0, num_sim_iters, integrator_fun)
 
 clear global;
 
@@ -47,7 +47,7 @@ input.u = repmat(zeros(1, 3), N, 1);
 input.y = repmat([x_ref.', zeros(1, 3)], N, 1);
 input.yN = x_ref.';
 
-states = x0.';
+states = x_ref.';
 controls = [];
 timing = [];
 status = [];
@@ -61,8 +61,13 @@ for i=1:num_sim_iters
     
     input.x = output.x;
     input.u = output.u;
-        
-    controls = [controls; output.u(1, :)];
+    
+    if i <= 5
+        controls = [controls; u_0.'];
+    else
+        controls = [controls; output.u(1, :)];
+    end
+    
     [~, sim_out] = integrator_fun(input.x0.', controls(end, :).');
     
     states = [states; sim_out(end, :)];
@@ -72,7 +77,7 @@ for i=1:num_sim_iters
     
 end
 
-system('rm acado_MPCstep.mexmaci64')
+system('rm acado_MPCstep.mexmaci64');
 
 end
 
