@@ -3,11 +3,18 @@ time_vector = linspace(0, num_sim_iters*Ts, num_sim_iters+1);
 
 solvers = fieldnames(X);
 
+distance_to_ref = struct();
+
 figure(1); clf;
 subplot(4, 2, 1);
 for j=1:numel(solvers)
-    distance_to_ref = max(abs(X.(solvers{j}) - repmat(x_ref.', num_sim_iters+1, 1)).');
-    semilogy(time_vector, distance_to_ref);
+    
+    XU = [X.(solvers{j}), [U.(solvers{j}); zeros(1, 3)]];
+    
+    XUerr = XU - repmat([x_ref.', zeros(1, 3)], num_sim_iters+1, 1);
+    
+    distance_to_ref.(solvers{j}) = diag(XUerr * W * XUerr.');
+    semilogy(time_vector, distance_to_ref.(solvers{j}));
     hold on
 end
 
@@ -18,7 +25,6 @@ for j=1:numel(solvers)
     hold on
 end
 plot(time_vector(1:end-1), 0*distance_to_ipopt + 0.2, 'k--', 'LineWidth', 2);
-ylim([0 0.3])
 
 for i=1:3
     subplot(4, 2, 2+i); hold on;
@@ -39,16 +45,18 @@ for j=1:numel(solvers)
 end
 legend(solvers);
 
-subplot(4, 2, 8); hold on;
+subplot(4, 2, 8);
 for j=1:numel(solvers)
-   stairs(log(double(num_iters.(solvers{j}))));
+   semilogy(num_iters.(solvers{j}));
+   hold on;
 end
 
-fprintf([repmat('-', 1, 80), '\n']);
-fprintf(['(ms)\t\tmedian\t\t\tmin\t\t\tmax\t\t', '\n']);
-fprintf([repmat('-', 1, 80), '\n']);
+fprintf([repmat('-', 1, 100), '\n']);
+fprintf(['(ms)\t\tmedian\t\t\tmin\t\t\tmax\t\t\tcost', '\n']);
+fprintf([repmat('-', 1, 100), '\n']);
 for j=1:numel(solvers)
-   fprintf(['%s\t\t', '%.2f', '\t\t\t', '%.2f', '\t\t\t', '%.2f', '\t\t\n'], ...
+   fprintf(['%s\t\t', '%.2f', '\t\t\t', '%.2f', '\t\t\t', '%.2f', '\t\t\t', '%.2f', '\n'], ...
        solvers{j}, 1000*median(timing.(solvers{j})), ...
-       1000*min(timing.(solvers{j})), 1000*max(timing.(solvers{j})));
+       1000*min(timing.(solvers{j})), 1000*max(timing.(solvers{j})), ...
+       max(max(abs(((U.(solvers{j}) - U.ipopt))))));
 end

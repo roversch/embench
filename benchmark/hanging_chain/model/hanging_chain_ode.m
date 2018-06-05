@@ -1,13 +1,13 @@
 function ode_rhs = hanging_chain_ode(x, u, num_free_masses)
 
 p = x(1:3*num_free_masses);
-v = x(3*num_free_masses+1:end-3);
-p_end = x(end-2:end);
+p_end = x(3*num_free_masses+1:3*(num_free_masses+1));
+v = x(3*(num_free_masses+1)+1:end);
 
 p0 = [0; 0; 0];
-L  = 0.033;
-D  = 1.0;
-m  = 0.03;
+L  = 0.55/4;
+D  = 0.4;
+m  = 0.1125;
 
 g = [0; 0; -9.81];
 f = v * 0;
@@ -35,8 +35,8 @@ for i = 1:num_free_masses+1
 end
 
 ode_rhs = [ v; ...
-            f; ...
-            u];
+            u; ...
+            f];
 
 end
 

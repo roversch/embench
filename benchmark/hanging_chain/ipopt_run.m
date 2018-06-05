@@ -1,4 +1,6 @@
-function [states, controls, timing, status, num_iters] = ipopt_run(num_free_masses, N, Ts, W, WN, umax, x_ref, u_0, num_sim_iters, integrator_fun)
+function [states, controls, timing, status, num_iters] = ipopt_run(num_free_masses, N, Ts, W, WN, umax, x_ref, x_0, u_0, num_sim_iters, integrator_fun, sigma, nrepeat)
+
+rng(0);
 
 clear GLOBAL
 
@@ -21,7 +23,7 @@ xu_ref = [x_ref; zeros(nu, 1)];
 f = 0.0;
 x = MX.sym('x_0', nx);
 w = x;
-w0 = x_ref;
+w0 = x_0;
 g = [];
 for i=0:N-1
     
@@ -32,7 +34,7 @@ for i=0:N-1
     sim_out = F('x0', x, 'p', u, 'h', Ts);
     
     w = [w; u; x1];
-    w0 = [w0; zeros(nu, 1); x_ref];
+    w0 = [w0; zeros(nu, 1); x_0];
     
     g = [g; x1 - sim_out.xf];
     
@@ -50,7 +52,11 @@ ipopt_solver = nlpsol('ipopt_solver', 'ipopt', struct('x', w, 'f', f, 'g', g), .
 
 bound = [umax; +inf*ones(nx, 1)];
 
-states = x_ref.';
+avg_timing = 0;
+
+for irepeat=1:nrepeat
+
+states = x_0.';
 controls = [];
 timing = [];
 status = [];
@@ -62,13 +68,13 @@ for i=1:num_sim_iters
     
     lbx = [x0; repmat(-bound, N, 1)];
     ubx = [x0; repmat(+bound, N, 1)];
-
+    
     output = ipopt_solver('x0', w0, 'lbx', lbx, 'ubx', ubx, 'lbg', 0, 'ubg', 0);
 
     w_opt = full(output.x);
     w0 = w_opt;
 
-    if (i <= 5)
+    if i >= num_sim_iters/2 && i < num_sim_iters/2 + 5
         controls = [controls; u_0.'];
     else
         controls = [controls; w_opt(nx+1: nx+nu).'];
@@ -76,7 +82,7 @@ for i=1:num_sim_iters
 
     [~, sim_out] = integrator_fun(x0, controls(end, :).');
 
-    states = [states; sim_out(end, :)];
+    states = [states; sim_out(end, :) + sigma*randn(1, 3*(2*num_free_masses+1))];
 
     timing = [timing; ipopt_solver.stats.t_proc_ipopt_solver];
 
@@ -89,6 +95,12 @@ for i=1:num_sim_iters
     num_iters = [num_iters; ipopt_solver.stats.iter_count];
     
 end
+
+avg_timing = avg_timing + timing;
+
+end
+
+timing = avg_timing / nrepeat;
 
 end
     
