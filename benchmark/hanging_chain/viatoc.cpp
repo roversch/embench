@@ -1,84 +1,98 @@
-
 #include "mpcexport.h"
 
-int main()
-{
-    constexpr int num_masses = 3;
-    constexpr int num_free_masses = num_masses - 2;
-    constexpr int nx = (2*num_free_masses + 1)*3;
-    constexpr int nu = 3;
-    constexpr int N = 40;
-    constexpr double Ts = 0.2;
+#define POW(x) ((x)*(x))
+#define SQRT(x) sqrt(x)
 
-    constexpr double L = 0.033;
-    constexpr double D = 1.0;
-    constexpr double m = 0.03;
-    constexpr double g = 9.81;
+int main ()
+{	
+	const double dt = 0.1;
 
-    DifferentialState px;
-    DifferentialState py;
-    DifferentialState pz;
-    DifferentialState vx;
-    DifferentialState vy;
-    DifferentialState vz;
-    DifferentialState p_endx;
-    DifferentialState p_endy;
-    DifferentialState p_endz;
-    Control ux;
-    Control uy;
-    Control uz;
-    
-    IntermediateState scale1, scale2, F1x, F1y, F1z, F2x, F2y, F2z;
-    
-    scale1 = -D / m * (1 - L / sqrt(1e-4+px*px+py*py+pz*pz));
-    scale2 = D / m * (1 - L / sqrt(1e-4+(p_endx-px)*(p_endx-px)+(p_endy-py)*(p_endy-py)+(p_endz-pz)*(p_endz-pz)));
-    
-    F1x = scale1 * px;
-    F1y = scale1 * py;
-    F1z = scale1 * pz;
+	/* dynamic states */
+	DifferentialState x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20;
 
-    F2x = scale2 * (p_endx - px);
-    F2y = scale2 * (p_endy - py);
-    F2z = scale2 * (p_endz - pz);
+	/* controls */
+	Control u0, u1, u2;
 
-    DifferentialEquation f;
-    f << dot(px) == vx;
-    f << dot(py) == vy;
-    f << dot(pz) == vz;
-    f << dot(vx) == F1x + F2x;
-    f << dot(vy) == F1y + F2y;
-    f << dot(vz) == F1z + F2z - g;
-    f << dot(p_endx) == ux;
-    f << dot(p_endy) == uy;
-    f << dot(p_endz) == uz;
+  /* continuous time model */
+	DifferentialEquation f;
+	f << dot(x0) == x12;
+	f << dot(x1) == x13;
+	f << dot(x2) == x14;
+	f << dot(x3) == x15;
+	f << dot(x4) == x16;
+	f << dot(x5) == x17;
+	f << dot(x6) == x18;
+	f << dot(x7) == x19;
+	f << dot(x8) == x20;
+	f << dot(x9) == u0;
+	f << dot(x10) == u1;
+	f << dot(x11) == u2;
+	f << dot(x12) == 8.88888888888889*(-0.1*(4. - 0.55 / SQRT(POW(x0) + POW(x1) + POW(x2)))*x0 + 0.1*(4. - 0.55 / SQRT(POW(x0 - x3) + POW(x1 - x4) + POW(x2 - x5)))*(-x0 + x3));
+	f << dot(x13) == 8.88888888888889*(-0.1*(4. - 0.55 / SQRT(POW(x0) + POW(x1) + POW(x2)))*x1 + 0.1*(4. - 0.55 / SQRT(POW(x0 - x3) + POW(x1 - x4) + POW(x2 - x5)))*(-x1 + x4));
+	f << dot(x14) == -9.81 + 8.88888888888889*(-0.1*(4. - 0.55 / SQRT(POW(x0) + POW(x1) + POW(x2)))*x2 + 0.1*(4. - 0.55 / SQRT(POW(x0 - x3) + POW(x1 - x4) + POW(x2 - x5)))*(-x2 + x5));
+	f << dot(x15) == 8.88888888888889*(-0.1*(4. - 0.55 / SQRT(POW(x0 - x3) + POW(x1 - x4) + POW(x2 - x5)))*(-x0 + x3) + 0.1*(4. - 0.55 / SQRT(POW(x3 - x6) + POW(x4 - x7) + POW(x5 - x8)))*(-x3 + x6));
+	f << dot(x16) == 8.88888888888889*(-0.1*(4. - 0.55 / SQRT(POW(x0 - x3) + POW(x1 - x4) + POW(x2 - x5)))*(-x1 + x4) + 0.1*(4. - 0.55 / SQRT(POW(x3 - x6) + POW(x4 - x7) + POW(x5 - x8)))*(-x4 + x7));
+	f << dot(x17) == -9.81 + 8.88888888888889*(-0.1*(4. - 0.55 / SQRT(POW(x0 - x3) + POW(x1 - x4) + POW(x2 - x5)))*(-x2 + x5) + 0.1*(4. - 0.55 / SQRT(POW(x3 - x6) + POW(x4 - x7) + POW(x5 - x8)))*(-x5 + x8));
+	f << dot(x18) == 8.88888888888889*(-0.1*(4. - 0.55 / SQRT(POW(x3 - x6) + POW(x4 - x7) + POW(x5 - x8)))*(-x3 + x6) + 0.1*(4. - 0.55 / SQRT(POW(x6 - x9) + POW(x7 - x10) + POW(x8 - x11)))*(-x6 + x9));
+	f << dot(x19) == 8.88888888888889*(-0.1*(4. - 0.55 / SQRT(POW(x3 - x6) + POW(x4 - x7) + POW(x5 - x8)))*(-x4 + x7) + 0.1*(4. - 0.55 / SQRT(POW(x6 - x9) + POW(x7 - x10) + POW(x8 - x11)))*(-x7 + x10));
+	f << dot(x20) == -9.81 + 8.88888888888889*(-0.1*(4. - 0.55 / SQRT(POW(x3 - x6) + POW(x4 - x7) + POW(x5 - x8)))*(-x5 + x8) + 0.1*(4. - 0.55 / SQRT(POW(x6 - x9) + POW(x7 - x10) + POW(x8 - x11)))*(-x8 + x11));
 
-    Matrix Q = eye(nx);
-    Q(0, 0) = 25;
-    Q(1, 1) = 25;
-    Q(2, 2) = 25;
-    Q(3, 3) = 1;
-    Q(4, 4) = 1;
-    Q(5, 5) = 1;
-    Q(6, 6) = 25;
-    Q(7, 7) = 25;
-    Q(8, 8) = 25;
+	/* costfunction weights */
+	Matrix Q = eye(15);
+	Matrix P = eye(3);
+	Function intCost;
+	Function terCost;
+	intCost << x9 -7.5;
+	intCost << x10;
+	intCost << x11;
+	intCost << x12;
+	intCost << x13;
+	intCost << x14;
+	intCost << x15;
+	intCost << x16;
+	intCost << x17;
+	intCost << x18;
+	intCost << x19;
+	intCost << x20;
+	intCost << u0;
+	intCost << u1;
+	intCost << u2;
+	terCost << x9 -7.5;
+	terCost << x10;
+	terCost << x11;
+	Q(0, 0) = 2.5;
+	Q(1, 1) = 2.5;
+	Q(2, 2) = 2.5;
+	Q(3, 3) = 25;
+	Q(4, 4) = 25;
+	Q(5, 5) = 25;
+	Q(6, 6) = 25;
+	Q(7, 7) = 25;
+	Q(8, 8) = 25;
+	Q(9, 9) = 25;
+	Q(10, 10) = 25;
+	Q(11, 11) = 25;
+	Q(12, 12) = 0.01;
+	Q(13, 13) = 0.01;
+	Q(14, 14) = 0.01;
+	P(0, 0) = 2.5;
+	P(1, 1) = 2.5;
+	P(2, 2) = 2.5;
 
-    Matrix R = eye(nu)*0.01;
+	MPCexport mpc(0.0, 8.0, 40);
+	mpc.minimizeLSQ(Q, intCost);
+	mpc.minimizeLSQEndTerm(P, terCost);
+	mpc.subjectTo(f);
+	mpc.subjectTo(-1.0 <= u0 <= 1.0);
+	mpc.subjectTo(-1.0 <= u1 <= 1.0);
+	mpc.subjectTo(-1.0 <= u2 <= 1.0);
 
-    MPCexport mpc(0.0, Ts*N, N);
-    mpc.minimizeLSQ(Q, R);
-    mpc.minimizeLSQEndTerm(Q);
+	mpc.set(INTEGRATOR_TYPE, INT_RK4);
+	mpc.set(EXPORT_CPP, YES);
+	mpc.set(EXPORT_SFUNCTION, YES);
 
-    mpc.subjectTo(f);
-    mpc.subjectTo(-1.0 <= ux <= 1.0);
-    mpc.subjectTo(-1.0 <= uy <= 1.0);
-    mpc.subjectTo(-1.0 <= uz <= 1.0);
-    
-    mpc.set(INTEGRATOR_TYPE, INT_RK4);
-    mpc.set(EXPORT_SFUNCTION, YES);
-    mpc.set(EXPORT_CPP, YES);
+	mpc.exportCode("_viatoc");
 
-    mpc.exportCode("_viatoc");
-    
-    return 0;
+	return 0;
 }
+
