@@ -26,6 +26,7 @@ for j=1:numel(solvers)
    semilogy(timing.(solvers{j}));
    hold on;
 end
+legend(solvers);
 
 subplot(4, 2, 8); hold on;
 for j=1:numel(solvers)

@@ -2,8 +2,6 @@ function [states, controls, timings, status, num_iters] = acado_run(N, Ts, W, WN
 
 clear GLOBAL
 
-run '~/ACADOtoolkit/interfaces/matlab/make'
-
 DifferentialState p theta v dtheta;
 Control Force;
 

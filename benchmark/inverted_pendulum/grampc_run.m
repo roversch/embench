@@ -33,7 +33,7 @@ user.param.t0    = 0.0;         % time at the current sampling step
 user.opt.Nhor        = N;      % Number of steps for the system integration
 user.opt.TerminalCost = 'on';
 user.opt.ShiftControl = 'off';
-user.opt.MaxMultIter = 20;
+user.opt.MaxMultIter = 5;
 user.opt.MaxGradIter = 20;
 
 % Constraints tolerances
@@ -54,9 +54,6 @@ grampc = CmexFiles.grampc_init_Cmex(userparam);
 
 % Update grampc struct while ensuring correct data types
 grampc = grampc_update_struct_grampc(grampc,user);
-
-% Estimate and set PenaltyMin
-grampc = CmexFiles.grampc_estim_penmin_Cmex(grampc,1);
 
 Tsim = num_sim_iters * Ts;
 

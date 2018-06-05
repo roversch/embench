@@ -16,7 +16,7 @@ WN = 1000*Q;
 
 Fmax = 8;
 x0 = [0; pi; 0; 0];
-num_sim_iters = 100;
+num_sim_iters = 150;
 
 solvers = {'ipopt', 'acados', 'acado', 'falcopt', 'grampc'};
 
