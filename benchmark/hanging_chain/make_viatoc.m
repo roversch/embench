@@ -1,0 +1,1 @@
+mex NMPCProblem_S.cpp NMPCProblem_S_wrapper.cpp NMPCProblem.cpp /Users/robin/viatoc/src/solver_cpp/nmpc.cpp /Users/robin/viatoc/src/solver_cpp/solver.cpp /Users/robin/viatoc/src/solver_cpp/projection.cpp -I. -I/Users/robin/viatoc/src/solver_cpp

@@ -2,7 +2,7 @@ function [states, controls, timing, status, num_iter] = run_viatoc(num_free_mass
 
 timing = 0;
 for i=1:nrepeat
-    sim('run_viatoc_sim');
+    sim('viatoc_run_sim');
     timing = timing + viatoc_timing.data(1:end-1,:);
 end
 
