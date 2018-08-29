@@ -6,10 +6,6 @@ probfct = 'probfct_NLCHAIN_4.c';
 
 copyfile(['../model/', probfct], probfct);
 
-grampc_root_path = '/Users/robin/GRAMPC/';
-
-addpath([grampc_root_path 'matlab/mfiles']);
-
 grampc_make_toolbox(grampc_root_path);
 grampc_make_probfct(grampc_root_path, probfct);
 

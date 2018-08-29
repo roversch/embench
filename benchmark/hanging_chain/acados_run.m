@@ -31,7 +31,7 @@ nlp.set_field('ubx', 0, x_0);
 nlp.set_stage_cost(eye(nx+nu), [x_ref; zeros(nu, 1)], W);
 nlp.set_terminal_cost(eye(nx), x_ref, WN);
 
-nlp.initialize_solver('sqp', struct('qp_solver', 'hpipm', 'max_iter', 1, ...
+nlp.initialize_solver('rti', struct('qp_solver', 'hpipm', ...
                       'hpipm', struct('N2', 5)));
 
 avg_timing = 0;

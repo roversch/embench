@@ -13,8 +13,6 @@ mass_vs_time = [];
 
 u_0 = [-1; 1; 1];
 
-hp = zeros(20, 20);
-
 for num_masses=5:5
 
     num_free_masses = num_masses - 2;

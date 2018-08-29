@@ -6,9 +6,6 @@ clear GLOBAL
 
 import casadi.*
 
-addpath('~/local/matlab');
-addpath('~/local/lib');
-
 nx = (2*num_free_masses+1)*3;
 nu = 3;
 
