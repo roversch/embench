@@ -41,7 +41,7 @@ ocp_model.set('constr_ubu', Fmax);  % upper bound on u
 
 ocp_model.set('constr_x0', x0);
 
-%% acados ocp set optsbuffer
+%% acados ocp set opts
 ocp_opts = acados_ocp_opts();
 ocp_opts.set('param_scheme_N', N);
 ocp_opts.set('nlp_solver', 'sqp_rti');
@@ -80,10 +80,10 @@ for j=1:1
         controls = [controls; unext];
 
         timing = [timing; ocp.get('time_tot') ];
-        if ocp.get('status')
+        status = [status; ocp.get('status')];
+        if status(end)
             keyboard
         end
-        status = [status; ocp.get('status')];
         
         stat = ocp.get('stat');
         qp_iter = sum(stat(:,3));
