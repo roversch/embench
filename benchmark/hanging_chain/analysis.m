@@ -14,12 +14,14 @@ for j=1:numel(solvers)
     XUerr = XU - repmat([x_ref.', zeros(1, 3)], num_sim_iters+1, 1);
     
     distance_to_ref.(solvers{j}) = diag(XUerr * W * XUerr.');
+    title('weighted distance to reference');
     semilogy(time_vector, distance_to_ref.(solvers{j}));
     hold on
 end
 
 subplot(4, 2, 2);
 for j=1:numel(solvers)
+    title('distance to IPOPT');
     distance_to_ipopt = max(abs(U.ipopt - U.(solvers{j})), [], 2);
     stairs(time_vector(1:end-1), distance_to_ipopt);
     hold on
@@ -28,6 +30,7 @@ plot(time_vector(1:end-1), 0*distance_to_ipopt + 0.2, 'k--', 'LineWidth', 2);
 
 for i=1:3
     subplot(4, 2, 2+i); hold on;
+    title(['u' num2str(i)]);
     for j=1:numel(solvers)
         stairs(time_vector(1:end-1), U.(solvers{j})(:, i))
     end
@@ -35,11 +38,13 @@ end
 
 subplot(4, 2, 6); hold on;
 for j=1:numel(solvers)
+    title('solver status');
     stairs(time_vector(1:end-1), status.(solvers{j}))
 end
 
 subplot(4, 2, 7);
 for j=1:numel(solvers)
+   title('solver timing');
    semilogy(timing.(solvers{j}));
    hold on;
 end
@@ -47,6 +52,7 @@ legend(solvers);
 
 subplot(4, 2, 8);
 for j=1:numel(solvers)
+   title('solver iterations');
    semilogy(num_iters.(solvers{j}));
    hold on;
 end
