@@ -2,6 +2,8 @@ function [states, controls, timing, status, num_iters] = grampc_run(num_free_mas
 
 rng(0);
 
+grampc_root_path = '../../../../embench_solvers/GRAMPC_v2.2/';
+
 probfct = 'probfct_NLCHAIN_4.c';
 
 copyfile(['../model/', probfct], probfct);
@@ -24,13 +26,14 @@ user.param.umin  = -umax;
 
 % Time variables
 user.param.Thor  = N*Ts;         % Prediction horizon
-user.param.Nhor  = N;
 
 user.param.dt    = Ts;         % Sampling time
 user.param.t0    = 0.0;         % time at the current sampling step
 
 %% Option definition
 % Basic algorithmic options
+user.opt.Nhor  = N;
+
 user.opt.MaxMultIter = 5;           % Maximum number of augmented Lagrange iterations
 % user.opt.MaxGradIter = 20;           % Maximum number of gradient iterations
 user.opt.ShiftControl = 'off';

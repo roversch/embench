@@ -1,5 +1,5 @@
 
-viatoc_path = '/Users/robin/viatoc';
+viatoc_path = '../../../embench_solvers/viatoc-0.91';
 
 mex('_viatoc/NMPCProblem_S.cpp', ...
     '_viatoc/NMPCProblem_S_wrapper.cpp', ...

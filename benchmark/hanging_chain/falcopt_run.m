@@ -4,9 +4,6 @@ rng(0);
 
 clear GLOBAL
 
-addpath('~/FalcOpt');
-addpath('~/local/matlab');
-
 import casadi.*
 
 dynamics = @(x,u) hanging_chain_ode_discrete(x, u, Ts, num_free_masses);
@@ -102,7 +99,7 @@ end
 
 timing = avg_timing / nrepeat;
 
-system('rm hanging_chain_falcopt.mexmaci64');
+system('rm hanging_chain_falcopt.*');
     
 end
     

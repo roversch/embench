@@ -1,6 +1,11 @@
 clear all;
 
+addpath('./')
 addpath('./model/');
+
+addpath('../../../embench_solvers/casadi-3.4.5');
+addpath('../../../embench_solvers/FalcOpt');
+addpath('../../../embench_solvers/GRAMPC_v2.2/matlab/mfiles');
 
 sigma = 0;
 nrepeat = 10;
