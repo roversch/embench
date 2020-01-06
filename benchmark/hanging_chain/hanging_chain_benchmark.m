@@ -3,6 +3,7 @@ clear all;
 addpath('./')
 addpath('./model/');
 
+addpath('../../../embench_solvers/acados/interfaces/acados_matlab_octave');
 addpath('../../../embench_solvers/casadi-3.4.5');
 addpath('../../../embench_solvers/FalcOpt');
 addpath('../../../embench_solvers/GRAMPC_v2.2/matlab/mfiles');
