@@ -66,3 +66,13 @@ for j=1:numel(solvers)
        1000*min(timing.(solvers{j})), 1000*max(timing.(solvers{j})), ...
        max(max(abs(((U.(solvers{j}) - U.ipopt))))));
 end
+
+figure(2);
+for j=1:numel(solvers)
+   title('solver timing');
+   semilogy(timing.(solvers{j}));
+   hold on;
+end
+legend(solvers);
+print(gcf, '-dpng', '-r100', 'CPU_timing');
+
